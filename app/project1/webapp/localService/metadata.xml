@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="AdminService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Products" EntityType="AdminService.Products">
+                    <NavigationPropertyBinding Path="producer" Target="Producer"/>
+                    <NavigationPropertyBinding Path="contact" Target="Contacts"/>
+                </EntitySet>
+                <EntitySet Name="Producer" EntityType="AdminService.Producer">
+                    <NavigationPropertyBinding Path="nationality" Target="Nationality"/>
+                </EntitySet>
+                <EntitySet Name="Nationality" EntityType="AdminService.Nationality"/>
+                <EntitySet Name="Contacts" EntityType="AdminService.Contacts"/>
+            </EntityContainer>
+            <EntityType Name="Products">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="title" Type="Edm.String" MaxLength="100"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="price" Type="Edm.Int32"/>
+                <Property Name="stock" Type="Edm.Int32"/>
+                <NavigationProperty Name="producer" Type="AdminService.Producer">
+                    <OnDelete Action="Cascade"/>
+                    <ReferentialConstraint Property="producer_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="producer_ID" Type="Edm.Int32"/>
+                <NavigationProperty Name="contact" Type="AdminService.Contacts">
+                    <ReferentialConstraint Property="contact_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="contact_ID" Type="Edm.Int32"/>
+            </EntityType>
+            <EntityType Name="Producer">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="name" Type="Edm.String" MaxLength="100"/>
+                <NavigationProperty Name="nationality" Type="Collection(AdminService.Nationality)">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <Property Name="nationality_ID" Type="Edm.Int32"/>
+            </EntityType>
+            <EntityType Name="Nationality">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="country" Type="Edm.String"/>
+            </EntityType>
+            <EntityType Name="Contacts">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="name" Type="Edm.String"/>
+                <Property Name="phone" Type="Edm.String"/>
+                <Property Name="locality" Type="Edm.String"/>
+                <Property Name="country" Type="Edm.String"/>
+                <Property Name="address" Type="Edm.String"/>
+            </EntityType>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
